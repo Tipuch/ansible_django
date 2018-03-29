@@ -1,0 +1,23 @@
+---
+- name: DJANGO | Ensure Projects Root Exists
+  file:
+    path: "{{ projects_root }}"
+    state: directory
+- name: DJANGO | Install Virtualenv
+  pip:
+    name: virtualenv
+    state: latest
+- name: DJANGO | Create Virtualenv
+  command: virtualenv -p {{ python_exec_path }} {{ virtualenv_path }}
+  args:
+    creates: "{{ virtualenv_path }}/bin/activate"
+- name: DJANGO | Setup Postactivate
+  template:
+    src: post_activate.j2
+    dest: "{{ virtualenv_path }}/bin/postactivate"
+    owner: "{{ project_user }}"
+    group: "{{ nginx_group }}"
+    mode: 0755
+    backup: yes
+  notify: restart application
+  tags: deploy

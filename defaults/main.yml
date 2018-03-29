@@ -1,0 +1,23 @@
+---
+python_version: "3.6.4"
+python_exec_path: /usr/local/bin/python3.6
+python_download_url: "https://www.python.org/ftp/python/{{ python_version }}/Python-{{ python_version }}.tgz"
+python_tmp_path: "/tmp/Python-{{ python_version }}"
+project_user: "{{ project_name }}"
+git_branch: master
+application_log_dir: "{{ virtualenv_path }}/logs"
+application_log_file: "{{ application_log_dir }}/uwsgi_supervisor.log"
+
+process_num: 4
+
+django_environment:
+  DJANGO_SETTINGS_MODULE: "{{ project_name }}.prod"
+  POSTGRES_DB: "{{ db_name }}"
+  POSTGRES_USER: "{{ db_user }}"
+  POSTGRES_PASSWORD: "{{ db_password }}"
+  ALLOWED_HOST: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
+  MEDIA_PATH: "{{ media_path }}"
+  MEDIA_URL: "{{ media_url }}"
+  STATIC_PATH: "{{ static_path }}"
+  STATIC_URL: "{{ static_url }}"
+  SECRET_KEY: "{{ secret_key }}"

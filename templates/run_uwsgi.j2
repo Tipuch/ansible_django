@@ -1,0 +1,6 @@
+#!/bin/sh
+
+. {{ virtualenv_path }}/bin/activate
+. {{ virtualenv_path }}/bin/postactivate
+
+exec uwsgi "{{ virtualenv_path }}/{{ project_name }}.ini"

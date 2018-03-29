@@ -1,0 +1,59 @@
+---
+- unarchive:
+    src: "{{ python_download_url }}"
+    dest: /tmp/
+    remote_src: yes
+    creates: "{{ python_tmp_path }}"
+  tags: python
+- package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - python3-dev
+    - make 
+    - build-essential 
+    - libssl-dev 
+    - zlib1g-dev   
+    - libbz2-dev
+    - libreadline-dev 
+    - libsqlite3-dev 
+    - wget
+    - curl 
+    - llvm 
+    - libncurses5-dev
+    - libncursesw5-dev
+    - xz-utils 
+    - tk-dev
+    - gettext
+    - libgettextpo-dev
+  tags: 
+    - packages
+    - python
+- stat: 
+    path: "{{ python_exec_path }}"
+  register: python_installed
+  tags:
+    - python
+- command: "./configure --enable-optimizations"
+  args:
+    chdir: "{{ python_tmp_path }}"
+  when: not python_installed.stat.exists
+  tags: 
+    - python
+- make:
+    chdir: "{{ python_tmp_path }}"
+  when: not python_installed.stat.exists
+  tags: 
+    - python
+- make:
+    chdir: "{{ python_tmp_path }}"
+    target: install
+  when: not python_installed.stat.exists
+  tags: 
+    - python
+- package:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ additional_packages }}"
+  when: additional_packages is defined
+  tags: packages

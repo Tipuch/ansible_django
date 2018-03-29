@@ -1,0 +1,15 @@
+[uwsgi]
+uid = {{ project_user }}
+guid = {{ nginx_group }}
+
+chdir = {{ project_path }}
+module = {{ project_name }}.wsgi:application
+
+master = true
+processes = {{ process_num }}
+
+socket = /tmp/{{ project_name }}.sock
+chmod-socket = 664
+vacuum = true
+
+touch-reload = {{ virtualenv_path }}/{{ project_name }}.ini
