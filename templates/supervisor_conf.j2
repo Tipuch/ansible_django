@@ -4,4 +4,4 @@ directory = {{ project_path }}
 user = {{ project_user }}
 stdout_logfile = {{ application_log_file }}
 redirect_stderr = true
-environment = {% for variable_name, value in django_environment.items() %}{{ variable_name }}="{{ value }}",{% endfor %}
+environment = {% for variable_name, value in django_environment.items() %}{{ variable_name }}="{{ value }}"{% if not loop.last %},{% endif %}{% endfor %}

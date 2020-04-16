@@ -4,8 +4,8 @@
     path: "{{ projects_root }}"
     state: directory
 - name: Install Virtualenv
-  command: "{{ python_exec_path }} {{ pip_exec_path }} install virtualenv"
-  become: true
+  pip:
+    name: virtualenv
 - name: Create Virtualenv
   command: virtualenv -p {{ python_exec_path }} {{ virtualenv_path }}
   args:

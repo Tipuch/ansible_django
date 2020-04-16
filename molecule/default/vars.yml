@@ -1,12 +1,13 @@
 ---
-project_name: hello_world
+project_name: "hello_world"
 projects_root: /webapps
 virtualenv_path: "{{ projects_root }}/{{ project_name }}"
 project_path: "{{ virtualenv_path }}/{{ project_name }}"
-media_path: "{{ project_path }}/media/"
+media_root: "{{ project_path }}/media/"
 media_url: "/media/"
-static_path: "{{ project_path }}/static/"
+static_root: "{{ project_path }}/static/"
 static_url: "/static/"
+allowed_host: "localhost"
 
 nginx_group: www-data
 
@@ -16,4 +17,4 @@ db_user: hello_world
 db_password: hello_world
 
 # django
-secret_key: "40-zo3gw&8087szra*khtlvd40)8rm7vyjz0ba_%*ug3zn6pj$"
+secret_key: "40zo3gw8087szrakhtlvd408rm7vyjz0baug3zn6pj"

@@ -4,17 +4,6 @@
     name: supervisor
     state: present
   tags: packages
-- name: Supervisord Service
-  service:
-    name: supervisor
-    state: started
-    enabled: yes
-- name: Supervisord Conf
-  template:
-    src: supervisor_conf.j2
-    dest: "/etc/supervisor/conf.d/{{ project_name }}.conf"
-    backup: yes
-  notify: restart application
 - name: Setup Log Directory
   file:
     path: "{{ application_log_dir }}"
@@ -30,7 +19,14 @@
     group: "{{ nginx_group }}"
     mode: 0664
     force: no
-- name: Re-read Supervisor conf files
-  supervisorctl:
-    name: "{{ project_name }}"
-    state: present
+- name: Supervisord Conf
+  template:
+    src: supervisor_conf.j2
+    dest: "/etc/supervisor/conf.d/{{ project_name }}.conf"
+    backup: yes
+  notify: restart application
+- name: Supervisord Service
+  service:
+    name: supervisor
+    state: started
+    enabled: yes

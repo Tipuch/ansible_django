@@ -1,7 +1,8 @@
 ---
 python_version: "3.8.2"
-python_exec_path: /usr/local/bin/python3.8
-pip_exec_path: /usr/local/lib/python3.8/site-packages/pip
+python_exe: python3.8
+python_exec_path: "/usr/local/bin/{{ python_exe }}"
+pip_exec_path: "/usr/local/lib/{{ python_exe }}/site-packages/pip"
 python_download_url: "https://www.python.org/ftp/python/{{ python_version }}/Python-{{ python_version }}.tgz"
 python_tmp_path: "/tmp/Python-{{ python_version }}"
 project_user: "{{ project_name }}"
@@ -17,9 +18,9 @@ django_environment:
   POSTGRES_DB: "{{ db_name }}"
   POSTGRES_USER: "{{ db_user }}"
   POSTGRES_PASSWORD: "{{ db_password }}"
-  ALLOWED_HOST: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
-  MEDIA_PATH: "{{ media_path }}"
+  ALLOWED_HOST: "{{ allowed_host }}"
+  MEDIA_ROOT: "{{ media_root }}"
   MEDIA_URL: "{{ media_url }}"
-  STATIC_PATH: "{{ static_path }}"
+  STATIC_ROOT: "{{ static_root }}"
   STATIC_URL: "{{ static_url }}"
   SECRET_KEY: "{{ secret_key }}"
