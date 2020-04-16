@@ -9,6 +9,7 @@
     name: "{{ item }}"
     state: present
   with_items:
+    - python3-apt
     - python3-dev
     - make
     - build-essential
@@ -20,12 +21,15 @@
     - libsqlite3-dev
     - liblzma-dev
     - python-openssl
+    - openssl
     - git
     - wget
     - curl
     - llvm
     - libncurses5-dev
     - libncursesw5-dev
+    - libc6-dev
+    - libgdbm-dev
     - xz-utils
     - tk-dev
     - gettext
@@ -38,21 +42,33 @@
   register: python_installed
   tags:
     - python
-- command: "./configure --enable-optimizations"
+- command: "{{ item }}"
+  become: true
   args:
     chdir: "{{ python_tmp_path }}"
+  with_items:
+    - "./configure --enable-optimizations"
+    - "make -d"
+    - make install
   when: not python_installed.stat.exists
+  ignore_errors: true
   tags:
     - python
-- make:
-    chdir: "{{ python_tmp_path }}"
-  when: not python_installed.stat.exists
+- stat:
+    path: "{{ pip_exec_path }}"
+  register: pip_installed
   tags:
     - python
-- make:
-    chdir: "{{ python_tmp_path }}"
-    target: install
-  when: not python_installed.stat.exists
+- name: Download get-pip script
+  get_url:
+    url: https://bootstrap.pypa.io/get-pip.py
+    dest: "{{ python_tmp_path }}/get-pip.py"
+  when: not pip_installed.stat.exists
+  tags:
+    - python
+- name: Install pip
+  command: "{{ python_exec_path }} {{ python_tmp_path }}/get-pip.py"
+  when: not pip_installed.stat.exists
   tags:
     - python
 - package:

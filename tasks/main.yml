@@ -1,43 +1,41 @@
 ---
-- name: DJANGO | Install Python
+- name: Install Python
   import_tasks: python.yml
-- name: DJANGO | UWSGI user and group
+- name: Project user and group
   user:
     name: "{{ project_user }}"
     group: "{{ nginx_group }}"
     state: present
-- name: DJANGO | Virtualenv Setup
+- name: Virtualenv Setup
   import_tasks: virtualenv.yml
-- name: DJANGO | Setup Project
+- name: Setup Project
   block:
-    - name: DJANGO | Setup the Git repo
+    - name: Setup the Git repo
       git: repo={{ git_repo }}
-          version={{ git_branch }}
-          dest={{ project_path }}
-          accept_hostkey=yes
+        version={{ git_branch }}
+        dest={{ project_path }}
+        accept_hostkey=yes
       notify: restart application
       tags:
         - git
         - deploy
-    - name: DJANGO | Delete all .pyc files
+    - name: Delete all .pyc files
       command: find . -name '*.pyc' -delete
       args:
         chdir: "{{ project_path }}"
       changed_when: False
       tags: deploy
-    - name: DJANGO | Install pip requirements
+    - name: Install pip requirements
       pip:
         virtualenv: "{{ virtualenv_path }}"
         requirements: "{{ project_path }}/requirements.txt"
       notify: restart application
-      tags: 
+      tags:
         - deploy
         - packages
-- name: DJANGO | UWSGI Setup
-  import_tasks: uwsgi.yml
-- name: DJANGO | Supervisord Setup
+- name: Supervisord Setup
   import_tasks: supervisor.yml
-- name: DJANGO | Set Permissions
+- name: Set Permissions
   file:
     dest: "{{ project_path }}"
     owner: "{{ project_user }}"
@@ -45,25 +43,25 @@
     recurse: yes
   tags:
     - deploy
-- name: DJANGO | Final manipulations
+- name: Final manipulations
   block:
-    - name: DJANGO | Run database migrations
+    - name: Run database migrations
       django_manage:
         command: migrate
         app_path: "{{ project_path }}"
         virtualenv: "{{ virtualenv_path }}"
         settings: "{{ django_environment.DJANGO_SETTINGS_MODULE }}"
       environment: "{{ django_environment }}"
-      tags: 
+      tags:
         - deploy
         - migrate
-    - name: DJANGO | Run collectstatic
+    - name: Run collectstatic
       django_manage:
         command: collectstatic
         app_path: "{{ project_path }}"
         virtualenv: "{{ virtualenv_path }}"
         settings: "{{ django_environment.DJANGO_SETTINGS_MODULE }}"
       environment: "{{ django_environment }}"
-      tags: 
+      tags:
         - deploy
         - collectstatic

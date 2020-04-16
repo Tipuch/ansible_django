@@ -1,0 +1,19 @@
+---
+project_name: hello_world
+projects_root: /webapps
+virtualenv_path: "{{ projects_root }}/{{ project_name }}"
+project_path: "{{ virtualenv_path }}/{{ project_name }}"
+media_path: "{{ project_path }}/media/"
+media_url: "/media/"
+static_path: "{{ project_path }}/static/"
+static_url: "/static/"
+
+nginx_group: www-data
+
+# database
+db_name: hello_world
+db_user: hello_world
+db_password: hello_world
+
+# django
+secret_key: "40-zo3gw&8087szra*khtlvd40)8rm7vyjz0ba_%*ug3zn6pj$"

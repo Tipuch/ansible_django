@@ -1,9 +1,11 @@
 ---
 python_version: "3.8.2"
 python_exec_path: /usr/local/bin/python3.8
+pip_exec_path: /usr/local/lib/python3.8/site-packages/pip
 python_download_url: "https://www.python.org/ftp/python/{{ python_version }}/Python-{{ python_version }}.tgz"
 python_tmp_path: "/tmp/Python-{{ python_version }}"
 project_user: "{{ project_name }}"
+git_repo: "https://github.com/Tipuch/hello_world.git"
 git_branch: master
 application_log_dir: "{{ virtualenv_path }}/logs"
 application_log_file: "{{ application_log_dir }}/uwsgi_supervisor.log"

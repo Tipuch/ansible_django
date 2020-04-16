@@ -1,0 +1,11 @@
+---
+- name: Converge
+  hosts: all
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+  tasks:
+    - name: "Include project variables"
+      include_vars: vars.yml
+    - name: "Include ansible_django"
+      include_role:
+        name: "ansible_django"

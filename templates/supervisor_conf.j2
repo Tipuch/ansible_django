@@ -1,5 +1,7 @@
 [program:{{ project_name }}]
-command = {{ virtualenv_path }}/bin/run_uwsgi
+command = {{ virtualenv_path }}/bin/uvicorn {{ project_name }}.asgi:application
+directory = {{ project_path }}
 user = {{ project_user }}
 stdout_logfile = {{ application_log_file }}
 redirect_stderr = true
+environment = {% for variable_name, value in django_environment.items() %}{{ variable_name }}="{{ value }}",{% endfor %}
