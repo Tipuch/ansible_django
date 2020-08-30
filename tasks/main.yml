@@ -18,6 +18,7 @@
         accept_hostkey: yes
         force: yes
       notify: restart application
+      changed_when: False
       tags:
         - git
         - deploy
@@ -44,6 +45,7 @@
     owner: "{{ project_user }}"
     group: "{{ nginx_group }}"
     recurse: yes
+  changed_when: False
   tags:
     - deploy
 - name: Set manage.py permissions
@@ -52,6 +54,7 @@
     owner: "{{ project_user }}"
     group: "{{ nginx_group }}"
     mode: "754"
+  changed_when: False
   tags:
     - deploy
 - name: Final manipulations
@@ -73,6 +76,7 @@
         virtualenv: "{{ virtualenv_path }}"
         settings: "{{ django_environment.DJANGO_SETTINGS_MODULE }}"
       environment: "{{ django_environment }}"
+      changed_when: False
       tags:
         - deploy
         - collectstatic
